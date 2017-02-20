@@ -10,24 +10,26 @@ public class PlayerController : MonoBehaviour {
 	public float fireRate;
 	
 	
-	private CharacterController controller;
+	private CharacterController cc;
 	private float currentJump;
 
 	private float nextFire;
 
 	void Start () {
-		controller = GetComponent<CharacterController>();
+		cc = GetComponent<CharacterController>();
 	}
 	
 	void Update () {
-		Vector3 moveDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 0.0f, Input.GetAxisRaw("Vertical")).normalized;
+		Vector3 moveDirection = new Vector3(Input.GetAxisRaw("MoveHorizontal"), 0.0f, Input.GetAxisRaw("MoveVertical")).normalized;
+		Vector3 lookDirection = new Vector3(Input.GetAxisRaw("LookHorizontal"), 0.0f, Input.GetAxisRaw("LookVertical")).normalized;
+		bool firing = lookDirection != Vector3.zero;
 
-		controller.SimpleMove(moveDirection * speed);
-		transform.rotation = Quaternion.LookRotation(moveDirection);
+		cc.SimpleMove(moveDirection * speed);
+		transform.rotation = Quaternion.LookRotation(lookDirection);
 
-		if (Input.GetButton("Fire1") && Time.time > nextFire) {
-            nextFire = Time.time + fireRate;
-            Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
-        }
+		if (firing && Time.time > nextFire) {
+			nextFire = Time.time + fireRate;
+			Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
+		}
 	}
 }
