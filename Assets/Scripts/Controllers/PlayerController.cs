@@ -37,14 +37,16 @@ public class PlayerController : MonoBehaviour {
 		transform.rotation = Quaternion.LookRotation(lastLookDirection);
 		
 		// animate
-		if (moveDirection == Vector3.zero) {
-			animator.Play("Idle");
+		if (moveDirection == Vector3.forward || moveDirection == Vector3.right || moveDirection == -Vector3.right) {
+			animator.SetBool("Walk Backward", false);
+			animator.SetBool("Walk Forward", true);			
 		} else if (moveDirection == -Vector3.forward && moveDirection != lookDirection) {
 			animator.SetBool("Walk Forward", false);
 			animator.SetBool("Walk Backward", true);
 		} else {
+			animator.SetBool("Walk Forward", false);
 			animator.SetBool("Walk Backward", false);
-			animator.SetBool("Walk Forward", true);
+			animator.Play("Idle");
 		}
 		
 		// shoot?
